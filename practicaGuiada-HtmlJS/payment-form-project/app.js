@@ -55,18 +55,45 @@ function savePayment(payment) {
 
 }
 
-function displayPayments() {
- const paymentList = document.getElementById("paymentList");
- const payments = getPayments();
- payments.forEach(function (payment) {
-    const row = document.createElement("tr");
- row.innerHTML = `
- <td>${payment.name}</td>
- <td>${payment.email}</td>
- <td>${payment.cardType}</td>
- `;
- paymentList.appendChild(row);
- });
- 
+function deletePayment(index) {
+    const payments = getPayments();
 
+    payments.splice(index, 1);// esto lo que significa es que desde la posicion index elimina 1 elemento
+
+    savePayments(payments);
+
+    displayPayments();
+}
+
+
+function displayPayments() {
+    const paymentList = document.getElementById("paymentList");
+
+    paymentList.innerHTML = "";
+
+    const payments = getPayments();
+
+    payments.forEach(function (payment, index) {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${payment.name}</td>
+            <td>${payment.email}</td>
+            <td>${payment.cardType}</td>
+        `;
+
+        const actionCell = document.createElement("td");
+
+        const button = document.createElement("button");
+        button.textContent = "Eliminar";
+
+        button.addEventListener("click", function () {
+            deletePayment(index);
+        });
+
+        actionCell.appendChild(button);
+        row.appendChild(actionCell);
+
+        paymentList.appendChild(row);
+    });
 }
